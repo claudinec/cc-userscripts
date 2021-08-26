@@ -5,21 +5,22 @@
 // @match https://www.coronavirus.vic.gov.au/exposure-site*
 // @grant none
 // @author Claudine Chionh <info@claudinec.net>
-// @version 0.1.4
+// @version 0.1.5
 // @license GPL-3.0-or-later
 // @downloadURL https://github.com/claudinec/cc-userscripts/raw/main/vic-exposure-site-highlighter.user.js
 // @supportURL https://github.com/claudinec/cc-userscripts/issues
 // @homepageURL https://github.com/claudinec/cc-userscripts
 // ==/UserScript==
 
-const splitRe = /,/
+const splitRe = /,\s?/
 const tierMatch = /Tier [0-9]/
 var alertSuburbs = ['Melbourne']
+const promptText = 'Suburbs to highlight, separated by commas'
 const savedSuburbs = sessionStorage.getItem('savedSuburbs')
 if (savedSuburbs) {
-  var promptSuburbs = prompt('Suburbs to highlight, separated by commas', savedSuburbs)
+  var promptSuburbs = prompt(promptText, savedSuburbs)
 } else {
-  var promptSuburbs = prompt('Suburbs to highlight, separated by commas', 'Melbourne')
+  var promptSuburbs = prompt(promptText, 'Melbourne')
 }
 if (promptSuburbs) {
   sessionStorage.clear()
