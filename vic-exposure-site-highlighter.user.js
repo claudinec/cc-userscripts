@@ -15,8 +15,15 @@
 const splitRe = /,/
 const tierMatch = /Tier [0-9]/
 var alertSuburbs = ['Melbourne']
-var promptSuburbs = prompt('Suburbs to highlight, separated by commas', 'Melbourne')
+const savedSuburbs = sessionStorage.getItem('savedSuburbs')
+if (savedSuburbs) {
+  var promptSuburbs = prompt('Suburbs to highlight, separated by commas', savedSuburbs)
+} else {
+  var promptSuburbs = prompt('Suburbs to highlight, separated by commas', 'Melbourne')
+}
 if (promptSuburbs) {
+  sessionStorage.clear()
+  sessionStorage.setItem('savedSuburbs', promptSuburbs)
   alertSuburbs = promptSuburbs.split(splitRe)
 }
 
