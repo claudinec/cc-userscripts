@@ -8,6 +8,9 @@
 // @author Claudine Chionh <info@claudinec.net>
 // @version 0.1.4
 // @license GPL-3.0-or-later
+// @downloadURL https://github.com/claudinec/cc-userscripts/raw/main/vic-exposure-site-highlighter.user.js
+// @supportURL https://github.com/claudinec/cc-userscripts/issues
+// @homepageURL https://github.com/claudinec/cc-userscripts
 // ==/UserScript==
 
 const splitRe = /,/
