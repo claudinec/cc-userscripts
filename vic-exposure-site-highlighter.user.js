@@ -7,7 +7,7 @@
 // @grant   GM_getValue
 // @grant   GM_setValue
 // @author Claudine Chionh <info@claudinec.net>
-// @version 0.2.0
+// @version 0.2.1
 // @license GPL-3.0-or-later
 // @downloadURL https://github.com/claudinec/cc-userscripts/raw/main/vic-exposure-site-highlighter.user.js
 // @supportURL https://github.com/claudinec/cc-userscripts/issues
@@ -48,7 +48,8 @@ GM_config.init(
         'type': 'text',
         'default': 'aqua'
       }
-    }
+    },
+    'css': 'textarea {display: block; width: 20%; height: 20%}'
   }
 )
 GM_config.open()
