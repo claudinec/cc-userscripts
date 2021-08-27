@@ -3,7 +3,9 @@
 // @namespace https://www.claudinec.net/
 // @description Finds and highlights suburbs of interest in the Victorian Government table of Covid-19 exposure sites. Highlight colour matches exposure tier (1-3).
 // @match https://www.coronavirus.vic.gov.au/exposure-site*
-// @grant none
+// @require            https://openuserjs.org/src/libs/sizzle/GM_config.js
+// @grant              GM_getValue
+// @grant              GM_setValue
 // @author Claudine Chionh <info@claudinec.net>
 // @version 0.1.5
 // @license GPL-3.0-or-later
@@ -12,20 +14,28 @@
 // @homepageURL https://github.com/claudinec/cc-userscripts
 // ==/UserScript==
 
-const splitRe = /,\s?/
+GM_config.init(
+  {
+    'id': 'suburbsConfig',
+    'fields':
+    {
+      'Suburbs':
+      {
+        'label': 'Suburbs to highlight, separated by commas or new lines',
+        'type': 'textarea',
+        'default': 'Melbourne'
+      }
+    }
+  }
+)
+GM_config.open()
+
+const splitRe = /\s?(,|\n)\s?/
 const tierMatch = /Tier [0-9]/
 var alertSuburbs = ['Melbourne']
-const promptText = 'Suburbs to highlight, separated by commas'
-const savedSuburbs = sessionStorage.getItem('savedSuburbs')
-if (savedSuburbs) {
-  var promptSuburbs = prompt(promptText, savedSuburbs)
-} else {
-  var promptSuburbs = prompt(promptText, 'Melbourne')
-}
-if (promptSuburbs) {
-  sessionStorage.clear()
-  sessionStorage.setItem('savedSuburbs', promptSuburbs)
-  alertSuburbs = promptSuburbs.split(splitRe)
+const suburbsText = GM_config.get('Suburbs')
+if (suburbsText) {
+  alertSuburbs = suburbsText.split(splitRe)
 }
 
 const resultsPage = document.body
