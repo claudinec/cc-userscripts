@@ -7,7 +7,7 @@
 // @grant              GM_getValue
 // @grant              GM_setValue
 // @author Claudine Chionh <info@claudinec.net>
-// @version 0.1.5
+// @version 0.2.0
 // @license GPL-3.0-or-later
 // @downloadURL https://github.com/claudinec/cc-userscripts/raw/main/vic-exposure-site-highlighter.user.js
 // @supportURL https://github.com/claudinec/cc-userscripts/issues
@@ -16,7 +16,8 @@
 
 GM_config.init(
   {
-    'id': 'suburbsConfig',
+    'id': 'highlightConfig',
+    'title': 'Exposure site highlighter options',
     'fields':
     {
       'Suburbs':
@@ -24,18 +25,54 @@ GM_config.init(
         'label': 'Suburbs to highlight, separated by commas or new lines',
         'type': 'textarea',
         'default': 'Melbourne'
+      },
+      'Tier 1 colour':
+      {
+        'label': 'Highlight colour for Tier 1 sites',
+        'section': [
+          'Highlight colours for Tiers 1-3 – use colour names or hex codes',
+          '<a href="https://www.w3.org/wiki/CSS/Properties/color/keywords">Colour reference</a>'
+        ],
+        'type': 'text',
+        'default': 'orangered'
+      },
+      'Tier 2 colour':
+      {
+        'label': 'Highlight colour for Tier 2 sites',
+        'type': 'text',
+        'default': 'yellow'
+      },
+      'Tier 3 colour':
+      {
+        'label': 'Highlight colour for Tier 3 sites',
+        'type': 'text',
+        'default': 'aqua'
       }
     }
   }
 )
 GM_config.open()
 
+// Get configuration for chosen suburbs.
 const splitRe = /\s?(,|\n)\s?/
-const tierMatch = /Tier [0-9]/
 var alertSuburbs = ['Melbourne']
 const suburbsText = GM_config.get('Suburbs')
 if (suburbsText) {
   alertSuburbs = suburbsText.split(splitRe)
+}
+
+// Get configuration for highlight colours.
+var tier1Colour = GM_config.get('Tier 1 colour')
+if (!tier1Colour || tier1Colour === '') {
+  tier1Colour = 'orangered'
+}
+var tier2Colour = GM_config.get('Tier 2 colour')
+if (!tier2Colour || tier2Colour === '') {
+  tier2Colour = 'yellow'
+}
+var tier3Colour = GM_config.get('Tier 3 colour')
+if (!tier3Colour || tier3Colour === '') {
+  tier3Colour = 'aqua'
 }
 
 const resultsPage = document.body
@@ -49,21 +86,22 @@ const observer = new MutationObserver(callback)
 observer.observe(resultsPage, { characterData: true, childList: true, subtree: true })
 
 function matchSuburbs () {
+  const tierMatch = /Tier [0-9]/
   const suburbs = document.querySelectorAll('td[data-tid="col-suburb"]')
   suburbs.forEach(suburb => {
     const suburbName = suburb.lastElementChild.textContent
     const suburbRow = suburb.closest('tr')
-    const siteTier = suburbRow.querySelector('.ch-health-advice-dropdown__title').textContent.match(tierMatch)
+    const siteTier = suburbRow.querySelector('.ch-health-advice-dropdown').textContent.match(tierMatch)
     if (alertSuburbs.includes(suburbName)) {
       switch (siteTier[0]) {
         case 'Tier 1':
-          suburbRow.style.backgroundColor = 'orangered'
+          suburbRow.style.backgroundColor = tier1Colour
           break
         case 'Tier 2':
-          suburbRow.style.backgroundColor = 'yellow'
+          suburbRow.style.backgroundColor = tier2Colour
           break
         case 'Tier 3':
-          suburbRow.style.backgroundColor = 'aqua'
+          suburbRow.style.backgroundColor = tier3Colour
           break
         // no default
       }
@@ -72,7 +110,7 @@ function matchSuburbs () {
 }
 
 function removeStyles () {
-  const dataRows = document.querySelectorAll('tr')
+  const dataRows = document.querySelectorAll('tbody tr')
   dataRows.forEach(dataRow => {
     dataRow.removeAttribute('style')
   })
