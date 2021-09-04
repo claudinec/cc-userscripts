@@ -2,7 +2,7 @@
 // @name Victorian Covid-19 exposure site highlighter
 // @namespace https://www.claudinec.net/
 // @description Finds and highlights suburbs of interest in the Victorian Government table of Covid-19 exposure sites. Highlight colour matches exposure tier (1-3).
-// @match https://www.coronavirus.vic.gov.au/exposure-site*
+// @include /www\.coronavirus\.vic\.gov\.au\/.*exposure-sites?/
 // @require https://openuserjs.org/src/libs/sizzle/GM_config.js
 // @grant   GM_getValue
 // @grant   GM_setValue
